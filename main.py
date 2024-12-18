@@ -1,3 +1,15 @@
-# il s'agira de lire le fichier d'entreé contenant les arguments et les attques
+import sys
 
-#faire appelle à notre classe ArgumentSystem pour les differents calculs
+from utilities import parse_arguments
+from controller import handle_parameters
+
+
+
+def main():
+    
+    args = parse_arguments()
+    
+    handle_parameters(args)
+
+if __name__ == "__main__":
+    main()

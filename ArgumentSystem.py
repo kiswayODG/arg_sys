@@ -1,11 +1,15 @@
 from typing import List, Tuple
 import itertools
 
+class argument_lib:
+    
+    def __init__(arg,lib):
+        self.arg = arg
+        self.lib = lib
 
 class ArgumentSystem:
 
     arguments: List[str] = [] 
-    all_ensemble_possible = [] 
     attaques: List[Tuple[str, str]] = []
     without_conflict: List[List[str]] = []
     admissible: List[List[str]] = []
@@ -58,6 +62,20 @@ class ArgumentSystem:
         if not is_admissible(ensemble):
             return False
         
+         for argument in ArgumentSystem.arguments:
+            attaquants = [ai for ai, cible in ArgumentSystem.attaques if cible == argument]
+
+        est_defendu = all(
+            any((ak, ai) in ArgumentSystem.attaques for ak in ensemble)
+            for ai in attaquants
+        )
+
+        if est_defendu and argument not in ensemble:
+            return False
+
+    return True
+
+
                  
     
     

@@ -17,6 +17,14 @@ class semantic(Enum):
     PR='prefered'
     GR='Grounded'
 ''' 
+
+class Semantic(Enum):
+    SE_CO = "SE-CO"
+    SE_ST = "SE-ST"
+    DC_CO = "DC-CO"
+    DS_CO = "DS-CO"
+    DC_ST = "DC-ST"
+    DS_ST = "DS-ST"
     
 def file_reader(file_path):
     arguments = set()
@@ -56,3 +64,4 @@ def parse_arguments():
                         help="Nom de l'argument de la requête (obligatoire pour DC/DS)")
 
     return parser.parse_args()
+

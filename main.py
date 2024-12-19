@@ -1,5 +1,4 @@
 import sys
-
 from utilities import parse_arguments
 from controller import handle_parameters
 

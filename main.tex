@@ -1,6 +1,9 @@
 \documentclass{rapportECL}
 \usepackage{lipsum}
 \usepackage{svg}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+
 \title{Rapport ECL - Template} %Titre du fichier
 
 \begin{document}
@@ -42,11 +45,89 @@
 \newpage % Crée une nouvelle page après l'abstract
 
 
-\section{Première section} 
+\section{Introduction} 
+Pour la réalisation de ce projet, une revue de littérature s’est naturellement imposée. Parmi les ressources pertinentes, nous avons trouvé plusieurs travaux particulièrement intéressants. 
 
-\lipsum[3-4]%Effacer cette ligne et écrire le texte souhaité
+En premier lieu, nous avons étudié le document sur l'argumentation computationnelle, notamment le cours d'Élise Bonzon, qui nous a servi de base pour comprendre les concepts fondamentaux. 
+Nous avons également exploré l'article \textit{An Introduction to Argumentation Semantics}, qui propose des définitions assez approfondies des différentes sémantiques de l'argumentation. 
+Enfin, l’étude des algorithmes pour les sémantiques d'argumentation, présentée dans \textit{Algorithms for Argumentation Semantics: Labeling Attacks as a Generalization of Labeling Arguments}, 
+nous a permis d’approfondir nos connaissances sur les algorithmes utilisés dans ce domaine et ainsi implémenter la solution du projet présent. 
 
-\subsection{Subsection}
+Cette exploration nous a permis de définir les objectifs du projet, présentés dans la section suivante.
+
+\section{Objectifs et fonctionnalités attendues du projet}
+Ce projet vise à développer un outil capable de résoudre des problèmes spécifiques liés aux systèmes d'argumentation abstraits (AF). 
+Un système d'argumentation est défini par un ensemble d'arguments (A) et une relation d'attaque (R) entre ces arguments. 
+L'objectif est de fournir une solution capable d’identifier les extensions complètes et stables, et évaluer l’appartenance 
+d’un argument à ces extensions selon des critères crédibles ou sceptiques.
+
+Le programme lit un système d'argumentation à partir d'un fichier texte formaté, analyse les données, et produit des résultats conformes selon la sémantique utilisée. 
+
+
+En complément, le projet propose une interface visuelle conviviale permettant de visualiser les arguments, leurs relations à travers des graphes et les résultats des analyses, facilitant ainsi l’interaction utilisateur et l’interprétation des résultats.
+
+\section{Algorithmes et structures de données} 
+
+
+\subsection{Algorithmes}
+Les algorithmes utilisés pour l'implémentation de ce projet sont spécifiquement ceux dédiés à l'énumération des extensions complètes 
+et stables. Ces algorithmes sont issus des travaux présentés dans l'article 
+\textit{"Algorithms for Argumentation Semantics: Labeling Attacks as a Generalization of Labeling Arguments"} [1].
+
+\begin{itemize}
+    \item Énumération des extensions stables.
+    
+	L'algorithme ci dessous de identifie toutes les extensions stables d’un AF (A,R) correspond[1] (p.642).
+	\begin{algorithm}
+		\caption{Enumerating all stable extensions of an AF $(A, R)$}
+		\begin{algorithmic}[1]
+			\STATE $Lab : A \to \{IN, OUT, MUST OUT, BLANK\}$; $Lab \gets \emptyset$
+			\FORALL{$x \in A$}
+				\STATE $Lab \gets Lab \cup \{(x, BLANK)\}$
+			\ENDFOR
+			\STATE $Estable \subseteq 2^A$; $Estable \gets \emptyset$
+			\STATE \textbf{call} find-stable-extensions($Lab$)
+			\STATE \textbf{report} $Estable$ is the set of all stable extensions
+			\STATE \textbf{procedure} find-stable-extensions($Lab$)
+			\WHILE{there exists $y \in A$ such that $Lab(y) = BLANK$}
+				\IF{there exists $y$ such that $Lab(y) = BLANK$ and $\forall z \in \{y\}^- : Lab(z) \in \{OUT, MUST OUT\}$}
+					\STATE select $y$ such that $Lab(y) = BLANK$
+				\ELSE
+					\STATE select $y$ such that $Lab(y) = BLANK$ and $\forall z : Lab(z) = BLANK$, 
+					\STATE $\left| \{x : x \in {y}^+ \land Lab(x) \neq OUT \} \right| \geq \left| \{x : x \in {z}^+ \land Lab(x) \neq OUT \} \right|$
+				\ENDIF
+				\STATE $Lab' \gets Lab$
+				\STATE $Lab'(y) \gets IN$
+				\FORALL{$z \in {y}^+$}
+					\STATE $Lab'(z) \gets OUT$
+				\ENDFOR
+				\FORALL{$z \in {y}^-$}
+					\IF{$Lab'(z) = BLANK$}
+						\STATE $Lab'(z) \gets MUST OUT$
+					\ENDIF
+					\IF{for all $w \in {z}^-$, $Lab'(w) \neq BLANK$}
+						\STATE $Lab(y) \gets MUST OUT$
+					\ENDIF
+				\ENDFOR
+				\STATE \textbf{goto} line 7
+				\STATE \textbf{call} find-stable-extensions($Lab'$)
+				\IF{there exists $z \in {y}^-$ such that $Lab(z) = BLANK$}
+					\STATE $Lab(y) \gets MUST OUT$
+				\ELSE
+					\STATE $Lab \gets Lab'$
+				\ENDIF
+				\IF{for all $x$, $Lab(x) \neq MUST OUT$}
+					\STATE $S \gets \{x : Lab(x) = IN\}$
+					\STATE $Estable \gets Estable \cup \{S\}$
+				\ENDIF
+			\ENDWHILE
+		\end{algorithmic}
+	\end{algorithm}
+	\begin{quote}
+		La notation \( y^- \) désigne l'ensemble des attaquants de \( y \), c'est-à-dire les éléments qui attaquent \( y \) dans l'argumentation. La notation \( y^+ \), quant à elle, représente l'ensemble des attaqués de \( y \), c'est-à-dire les éléments que \( y \) attaque.
+	\end{quote}	
+\end{itemize}
+
 
 \lipsum[3-4] %Effacer cette ligne et écrire le texte souhaité
 

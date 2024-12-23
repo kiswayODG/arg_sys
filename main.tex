@@ -1,0 +1,86 @@
+\documentclass{rapportECL}
+\usepackage{lipsum}
+\usepackage{svg}
+\title{Rapport ECL - Template} %Titre du fichier
+
+\begin{document}
+
+%----------- Informations du rapport ---------
+
+\titre{Implémentation d'Algorithmes pour les Systèmes d'Argumentation Abstraits} %Titre du fichier .pdf
+\UE{Représentation des Connaissances et Raisonnement} %Nom de la UE
+\sujet{ Introduction à l’Argumentation - Projet} %Nom du sujet
+
+\enseignant{Elise \textsc{Bonzon}} %Nom de l'enseignant
+
+\eleves{Hugo \textsc{Convert} \\
+		Kiswendsida \textsc{OUEDRAOGO} } %Nom des élèves
+
+%----------- Initialisation -------------------
+        
+\fairemarges %Afficher les marges
+\fairepagedegarde %Créer la page de garde
+\tabledematieres %Créer la table de matières
+
+%------------ Corps du rapport ----------------
+\begin{abstract}
+	Ce rapport présente le travail réalisé dans le cadre du développement d’un outil informatique dédié à la résolution de problèmes 
+	dans le domaine des systèmes d’argumentation abstraits. Nous avons commencé par une exploration approfondie des algorithmes de 
+	calcul des extensions complètes et stables, en nous appuyant sur des travaux de recherche issus de la littérature scientifique 
+	sur l’argumentation. Ces algorithmes ont été décrits en détail, accompagnés d’explications sur leurs mécanismes et les structures 
+	de données utilisées pour leur implémentation.
+
+    Grâce à ces algorithmes, nous avons pu répondre aux problématiques posées dans le sujet du projet, telles que la détermination 
+	des extensions d’un système d’argumentation donné et l’évaluation de l’appartenance d’un argument à une extension.
+
+    En complément, nous avons développé une interface graphique conviviale permettant de visualiser les systèmes d’argumentation, 
+	leurs arguments, et les relations entre eux, offrant ainsi une meilleure interaction utilisateur et facilitant l’analyse des 
+	résultats. Ce rapport détaille les méthodologies employées, les choix techniques effectués et les résultats obtenus, illustrant 
+	ainsi notre contribution à la mise en œuvre pratique des concepts théoriques de l’argumentation.
+\end{abstract}
+
+\newpage % Crée une nouvelle page après l'abstract
+
+
+\section{Première section} 
+
+\lipsum[3-4]%Effacer cette ligne et écrire le texte souhaité
+
+\subsection{Subsection}
+
+\lipsum[3-4] %Effacer cette ligne et écrire le texte souhaité
+
+\section{Deuxième section}
+
+\lipsum[3-5] %Effacer cette ligne et écrire le texte souhaité
+
+%------------- Commandes utiles ----------------
+
+\section{Quelques commandes}
+
+Voici quelques commandes utiles :
+
+%------ Pour insérer et citer une image centralisée -----
+
+%\insererfigure{logos/logo.svg}{3cm}{Légende de la figure}{Label de la figure}
+% Le premier argument est le chemin pour la photo
+% Le deuxième est la hauteur de la photo
+% Le troisième la légende
+% Le quatrième le label
+Ici, je cite l'image \ref{fig: Label de la figure}
+
+
+%------- Pour insérer et citer une équation --------------
+
+\begin{equation} \label{eq: exemple}
+\rho + \Delta = 42
+\end{equation}
+
+L'équation \ref{eq: exemple} est cité ici. 
+
+% ------- Pour écrire des variables ----------------------
+
+Pour écrire des variables dans le texte, il suffit de mettre le symbole \$ entre le texte souhaité comme : constante $\rho$. 
+
+
+\end{document}

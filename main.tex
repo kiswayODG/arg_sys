@@ -64,7 +64,7 @@ d’un argument à ces extensions selon des critères crédibles ou sceptiques.
 Le programme lit un système d'argumentation à partir d'un fichier texte formaté, analyse les données, et produit des résultats conformes selon la sémantique utilisée. 
 
 
-En complément, le projet propose une interface visuelle conviviale permettant de visualiser les arguments, leurs relations à travers des graphes et les résultats des analyses, facilitant ainsi l’interaction utilisateur et l’interprétation des résultats.
+Le projet propose également une interface visuelle  representant les arguments, leurs relations sous forme de graphes et ainsi que les résultats des analyses pour faciliter l’interaction utilisateur et l’interprétation des résultats.
 
 \section{Algorithmes et structures de données} 
 
@@ -73,15 +73,33 @@ En complément, le projet propose une interface visuelle conviviale permettant d
 Les algorithmes utilisés pour l'implémentation de ce projet sont spécifiquement ceux dédiés à l'énumération des extensions complètes 
 et stables. Ces algorithmes sont issus des travaux présentés dans l'article 
 \textit{"Algorithms for Argumentation Semantics: Labeling Attacks as a Generalization of Labeling Arguments"} [1].
+Pour les deux algorithmes qui seront présentés dessous, tournera autour autour de l'utilisation d'étiquettes qui sont IN, OUT,  {MUST\_OUT}, BLANK et UNDEC.
+{MUST\_OUT} et BLANK n'ayant pas été abordé en cours, sont en effet ici des détails d'implémentation.
+
+
+L'étiquette \textbf{IN} identifie les arguments qui pourraient appartenir à  l'extension recherchée. L'étiquette \textbf{OUT} 
+identifie un argument qui est attaqué par un argument \textbf{IN}. L'étiquette \textbf{BLANK} est attribuée à tout argument non 
+traité dont l'étiquette finale n'est pas encore déterminée. L'étiquette \textbf{ {MUST\_OUT}} identifie les arguments qui attaquent des 
+arguments \textbf{IN}. Enfin, l'étiquette \textbf{UNDEC} désigne les arguments qui pourraient ne pas être inclus dans  l'extension, car ils pourraient ne pas être défendus par un argument \textbf{IN}.
+
 
 \begin{itemize}
     \item Énumération des extensions stables.
     
-	L'algorithme ci dessous de identifie toutes les extensions stables d’un AF (A,R) correspond[1] (p.642).
+	L'algorithme ci-dessous identifie toutes les extensions stables d’un AF $(A, R)$, comme décrit dans [] (p. 642). %\cite{ref}  
+	On remarque l'absence d'utilisation du label \textbf{UNDEC}. La sémantique du label \textbf{MUST\_OUT} peut être interprétée comme celle 
+	d'un \textbf{UNDEC} qui attaque un argument étiqueté \(\textbf{IN}\). 
+	Cependant, dans une labellisation visant à identifier une extension stable, aucun argument ne devrait rester étiqueté \textbf{UNDEC} à 
+	la fin. 
+
+	C'est pourquoi le label \textbf{MUST\_OUT} est utilisé à la ligne 34 pour désigner les arguments susceptibles d'évoluer 
+	vers \textbf{OUT} à la fin de la labellisation. Ainsi, un ensemble d'arguments \( S \), étiqueté \(\textbf{IN}\), est 
+	considéré comme stable uniquement s'il n'existe aucun argument étiqueté \textbf{MUST\_OUT} à l'issue de la labellisation.
+
 	\begin{algorithm}
 		\caption{Enumerating all stable extensions of an AF $(A, R)$}
 		\begin{algorithmic}[1]
-			\STATE $Lab : A \to \{IN, OUT, MUST OUT, BLANK\}$; $Lab \gets \emptyset$
+			\STATE $Lab : A \to \{IN, OUT,  MUST\_OUT, BLANK\}$; $Lab \gets \emptyset$
 			\FORALL{$x \in A$}
 				\STATE $Lab \gets Lab \cup \{(x, BLANK)\}$
 			\ENDFOR
@@ -90,7 +108,7 @@ et stables. Ces algorithmes sont issus des travaux présentés dans l'article
 			\STATE \textbf{report} $Estable$ is the set of all stable extensions
 			\STATE \textbf{procedure} find-stable-extensions($Lab$)
 			\WHILE{there exists $y \in A$ such that $Lab(y) = BLANK$}
-				\IF{there exists $y$ such that $Lab(y) = BLANK$ and $\forall z \in \{y\}^- : Lab(z) \in \{OUT, MUST OUT\}$}
+				\IF{there exists $y$ such that $Lab(y) = BLANK$ and $\forall z \in \{y\}^- : Lab(z) \in \{OUT,  MUST\_OUT\}$}
 					\STATE select $y$ such that $Lab(y) = BLANK$
 				\ELSE
 					\STATE select $y$ such that $Lab(y) = BLANK$ and $\forall z : Lab(z) = BLANK$, 
@@ -103,20 +121,20 @@ et stables. Ces algorithmes sont issus des travaux présentés dans l'article
 				\ENDFOR
 				\FORALL{$z \in {y}^-$}
 					\IF{$Lab'(z) = BLANK$}
-						\STATE $Lab'(z) \gets MUST OUT$
+						\STATE $Lab'(z) \gets  MUST\_OUT$
 					\ENDIF
 					\IF{for all $w \in {z}^-$, $Lab'(w) \neq BLANK$}
-						\STATE $Lab(y) \gets MUST OUT$
+						\STATE $Lab(y) \gets  MUST\_OUT$
 					\ENDIF
 				\ENDFOR
 				\STATE \textbf{goto} line 7
 				\STATE \textbf{call} find-stable-extensions($Lab'$)
 				\IF{there exists $z \in {y}^-$ such that $Lab(z) = BLANK$}
-					\STATE $Lab(y) \gets MUST OUT$
+					\STATE $Lab(y) \gets  MUST\_OUT$
 				\ELSE
 					\STATE $Lab \gets Lab'$
 				\ENDIF
-				\IF{for all $x$, $Lab(x) \neq MUST OUT$}
+				\IF{for all $x$, $Lab(x) \neq  MUST\_OUT$}
 					\STATE $S \gets \{x : Lab(x) = IN\}$
 					\STATE $Estable \gets Estable \cup \{S\}$
 				\ENDIF
@@ -124,44 +142,157 @@ et stables. Ces algorithmes sont issus des travaux présentés dans l'article
 		\end{algorithmic}
 	\end{algorithm}
 	\begin{quote}
-		La notation \( y^- \) désigne l'ensemble des attaquants de \( y \), c'est-à-dire les éléments qui attaquent \( y \) dans l'argumentation. La notation \( y^+ \), quant à elle, représente l'ensemble des attaqués de \( y \), c'est-à-dire les éléments que \( y \) attaque.
+$(y, z) \in R$ signifie que $y$ attaque $z$ (ou que $z$ est attaqué par $y$).  
+On note $\{y\}^-$ l'ensemble des arguments qui attaquent $y$,  
+et $\{y\}^+$ l'ensemble des arguments attaqués par $y$.  
 	\end{quote}	
+
+
+Le processus commence par l'initialisation des arguments avec un label  {BLANK}, signifiant qu'aucun argument n'a encore été catégorisé. 
+Ensuite, l'algorithme cherche à trouver toutes les extensions stables possibles en étiquetant les arguments de manière appropriée. 
+Tant qu'il existe des arguments non étiquetés, l'algorithme sélectionne un argument \( y \) avec un label  {BLANK}. 
+Le critère de sélection dépend de la situation : si l'argument \( y \) n'a pas d'attaquants non étiquetés (c'est-à-dire que tous ses attaquants ont déjà été étiquetés comme  {OUT} ou ), il est selectionné, 
+ce qui signifie qu'il fait partie de l'extension.  Dans le cas contraire, l'algorithme choisit un argument \( y \) de manière à maximiser le nombre d'arguments attaqués par \( y \) (\( {y}^+ \)) qui ne sont pas encore étiquetés \(  {OUT} \).
+
+
+Une copie complète de l'état des labels est effectuée pour la propagation des étiquettes (Lab' <- Lab)
+
+
+Une fois un argument sélectionné et étiqueté  {IN}, l'algorithme modifie les labels des arguments attaqués par \( y \). Tous les arguments attaqués par \( y \) (les voisins de \( y \) dans l'ensemble \( \{y\}^+ \)) reçoivent le label  {OUT}, indiquant qu'ils sont exclus de l'extension. 
+Les arguments voisins attaquant \( y \) \(\in\) \( \{y\}^- \) mais qui ne sont pas encore étiquetés ( {BLANK}) reçoivent le label  { MUST\_OUT}, signifiant qu'ils doivent être exclus de manière forcée et ne peuvent pas faire partie de l'extension. 
+
+Si tous les attaquants \( \{z\}^- \) d'un argument \( z \) sont déjà étiquetés autre que ( {BLANK}), cela entraîne la mise à jour du label de \( y \) en  { MUST\_OUT} l'état des labels original, 
+car l'argument \( y \) devient ainsi incompatible avec l'extension en cours et on execute un retour anticipé au début de la boucle while.
+
+Une fois que les labels ont été modifiés, l'algorithme procède à une exploration récursive en appelant à nouveau la procédure pour tester de nouvelles configurations. 
+
+
+On s'assure qu'il n'existe aucun argument \( z \) dans l'ensemble \( \{y\}^- \) qui soit étiqueté \(  {BLANK} \) dans l'état \( Lab \). Si tel est le cas, l'argument \( y \) est étiqueté \(  {MUST\_OUT} \). Sinon, l'état \( Lab \) est mis à jour pour être égal à l'état tampon \( Lab' \).
+
+Si tous les arguments attaqués par \( y \) ont des labels autres que  { MUST\_OUT}, l'extension est considérée comme stable et l'ensemble des arguments étiquetés  {IN} est ajouté à l'ensemble des extensions stables.
+
+l'exécution du bloc suivant l'appel récursif est mise dans la pile d'exécution, et elle sera traitée après tous les appels récursifs.
+
+\newpage
+
+\item Énumération des extensions complètes.
+L'algorithme ci dessous de identifie toutes les extensions complètes d’un AF (A,R) correspond[1] (p.644).
+
+\begin{algorithm}
+    \caption{Enumerating all complete extensions of an AF $(A, R)$}
+    \begin{algorithmic}[1]
+        \STATE $Lab : A \to \{\text{IN}, \text{OUT}, \text{MUST\_OUT}, \text{UNDEC}, \text{BLANK}\}$; $Lab \gets \emptyset$
+        \FORALL{$x \in A$}
+            \STATE $Lab \gets Lab \cup \{(x, \text{BLANK})\}$
+        \ENDFOR
+        \STATE $E_{\text{complete}} \subseteq 2^A$; $E_{\text{complete}} \gets \emptyset$
+        \STATE \textbf{call} find-complete-extensions($Lab$)
+        \STATE \textbf{report} $E_{\text{complete}}$ is the set of all complete extensions
+        \STATE \textbf{procedure} find-complete-extensions($Lab$)
+        \IF{there exists $y \in A$ such that $Lab(y) = \text{MUST\_OUT}$}
+            \RETURN
+        \ENDIF
+        \IF{for all $x \in A$, $Lab(x) \in \{\text{UNDEC}, \text{BLANK}\} \implies \forall z \in \{x\}^-, Lab(z) = \text{OUT}$}
+            \STATE $S \gets \{w \in A \mid Lab(w) = \text{IN}\}$
+            \STATE $E_{\text{complete}} \gets E_{\text{complete}} \cup \{S\}$
+        \ENDIF
+        \WHILE{there exists $y \in A$ such that $Lab(y) = \text{BLANK}$}
+            \IF{$\forall z \in \{y\}^-, Lab(z) \in \{\text{OUT}, \text{MUST\_OUT}\}$}
+                \STATE select $y$ such that $Lab(y) = \text{BLANK}$
+            \ELSE
+                \STATE select $y$ such that $Lab(y) = \text{BLANK}$ and $\forall z : Lab(z) = \text{BLANK}$,
+                \STATE $\left| \{x \mid x \in {y}^+ \land Lab(x) \neq \text{OUT} \} \right| \geq \left| \{x \mid x \in {z}^+ \land Lab(x) \neq \text{OUT} \} \right|$
+            \ENDIF
+            \STATE $Lab' \gets Lab$
+            \STATE $Lab'(y) \gets \text{IN}$
+            \FORALL{$z \in {y}^+$}
+                \STATE $Lab'(z) \gets \text{OUT}$
+            \ENDFOR
+            \FORALL{$z \in {y}^-$}
+                \IF{$Lab'(z) \in \{\text{UNDEC}, \text{BLANK}\}$}
+                    \STATE $Lab'(z) \gets \text{MUST\_OUT}$
+                \ENDIF
+                \IF{for all $w \in {z}^-, Lab'(w) \neq \text{BLANK}$}
+                    \STATE $Lab(y) \gets \text{UNDEC}$
+                \ENDIF
+            \ENDFOR
+            \STATE \textbf{goto} line 7
+            \STATE \textbf{call} find-complete-extensions($Lab'$)
+            \IF{there exists $z \in {y}^-$ such that $Lab(z) \in \{\text{BLANK}, \text{UNDEC}\}$}
+                \STATE $Lab(y) \gets \text{UNDEC}$
+            \ELSE
+                \STATE $Lab \gets Lab'$
+            \ENDIF
+        \ENDWHILE
+    \end{algorithmic}
+\end{algorithm}
+
+ L'algorithme est repose sur le même principe que le préccédent avec quelques petits changements pour satisfaire les conditions d'extension stable.
+ On part toujours sur la base d'arguments tous etiquettés à blanc;  le critère de selection d'argument pour la propagation des labels restant le même.
+ On constate l'utilisation du label UNDEC ici lorsqu'une incompatibilité est levé en lieu et place de MUST\_OUT dans l'algorithm 1.
+ 
+ on détermine si un ensemble \( S \) (les éléments dont le label est \( \text{IN} \)) est une extension complète en vérifiant 
+ deux conditions. 
+
+ 	\begin{enumerate}
+		\item Tout d'abord, garantir qu' aucun élément \( x \) de \( A \) n'est marqué 
+		comme \( \text{MUST OUT} \).
+		\item Ensuite, on vérifie qu'il n'existe pas un élément \( z \) 
+		qui reste indéterminé (\( \text{UNDEC} \) ou \( \text{BLANK} \)) et qui aurait tous ses attaquants (les éléments de \( \{z\}^- \)) déjà marqués comme \( \text{OUT} \).
+	\end{enumerate}
+
+\end{itemize}
+
+\newpage
+
+\subsection{structures de données}
+
+La manipulation des données dans le projet repose essentiellement sur l’utilisation de listes et de dictionnaires pour la représentation des arguments et des relations d’attaque.
+
+\begin{itemize}
+    \item Les arguments sont stockés dans une liste ou un ensemble. Par exemple : 
+    \[
+    {arguments = \{"A", "B", "C"\}}
+    \]
+    où \( A \), \( B \) et \( C \) représentent les arguments.
+
+    \item Les attaques sont représentées par un dictionnaire, chaque clé correspondant à un argument et la valeur étant l’ensemble des arguments qu’il attaque. Par exemple :
+    \[
+    {attacks = \{"A": \{"B", "C"\}, "B": \{"C"\}\}}
+    \]
+    Ici, \( A \) attaque \( B \) et \( C \), tandis que \( B \) attaque \( C \).
 \end{itemize}
 
 
-\lipsum[3-4] %Effacer cette ligne et écrire le texte souhaité
+\section{Implémentation et tests}
 
-\section{Deuxième section}
+\subsection{Implémentation}
 
-\lipsum[3-5] %Effacer cette ligne et écrire le texte souhaité
+La proposition de solution a été faite \textbf{Python}. Nous avons choisi Python pour sa simplicité d'implémentation et sa flexibilité pour la manipulations des structures 
+de données  telles que les listes et les dictionnaires que nous utilisons.
 
-%------------- Commandes utiles ----------------
+\subsubsection{Architecture}
 
-\section{Quelques commandes}
+L'architecture du projet repose sur l'utilisation de classes et de méthodes afin de faciliter le partage des données et des fonctions entre différents composants répartis sur plusieurs fichiers. Les principales parties de l'architecture sont décrites ci-dessous :
 
-Voici quelques commandes utiles :
+\begin{itemize}
+    \item \textbf{main.py} : Ce fichier sert de point d'entrée principal pour l'exécution de la solution. L'utilisateur peut lancer le programme en mode console avec les paramètres suivants :
+    \begin{itemize}
+        \item \texttt{-P} : pour spécifier la sémantique de calcul.
+        \item \texttt{-f} : pour indiquer le fichier contenant l'Argumentation Framework (AF).
+        \item \texttt{-a} : (optionnel) pour spécifier les arguments, en fonction de la sémantique choisie.
+    \end{itemize}
+    Ce fichier appelle les autres fichiers pour le traitement des données et l'exécution des algorithmes, parmi lesquels on a:
 
-%------ Pour insérer et citer une image centralisée -----
+    \item \textbf{utilities.py} : Ce fichier contient des classes et des méthodes utilitaires, comme la classe \texttt{file\_reader}, qui permet de lire les fichiers contenant l'AF. Ces méthodes facilitent la gestion des fichiers et la manipulation des données avant leur traitement.
 
-%\insererfigure{logos/logo.svg}{3cm}{Légende de la figure}{Label de la figure}
-% Le premier argument est le chemin pour la photo
-% Le deuxième est la hauteur de la photo
-% Le troisième la légende
-% Le quatrième le label
-Ici, je cite l'image \ref{fig: Label de la figure}
+    \item \textbf{controller.py} : Ce fichier contient les méthodes responsables de la gestion des flux de données. Il fait appel aux méthodes de calcul spécifiques en fonction des paramètres fournis par l'utilisateur, en organisant et en contrôlant l'exécution des algorithmes.
 
+    \item \textbf{computing\_methods.py} : Ce fichier contient l'implémentation des algorithmes d'énumération des extensions complètes et stables. Afin de garantir une bonne lisibilité du code, les parties répétitives dans les algorithmes ont été extraites et regroupées dans des méthodes uniques. Par exemple, la méthode \texttt{select\_argument} est utilisée pour sélectionner un argument dans les différents algorithmes afin de réduire la duplication du code.
 
-%------- Pour insérer et citer une équation --------------
+    \item \textbf{af\_visualizer.py} : Ce fichier gère l'interface graphique de l'application. Il est basé sur les mêmes méthodes des fichiers précédemment mentionnés, permettant une interaction visuelle avec l'utilisateur pour soumettre des fichiers et afficher les résultats sous une forme graphique.
+\end{itemize}
 
-\begin{equation} \label{eq: exemple}
-\rho + \Delta = 42
-\end{equation}
-
-L'équation \ref{eq: exemple} est cité ici. 
-
-% ------- Pour écrire des variables ----------------------
-
-Pour écrire des variables dans le texte, il suffit de mettre le symbole \$ entre le texte souhaité comme : constante $\rho$. 
 
 
 \end{document}

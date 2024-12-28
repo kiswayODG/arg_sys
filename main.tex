@@ -3,6 +3,11 @@
 \usepackage{svg}
 \usepackage{algorithm}
 \usepackage{algorithmic}
+\usepackage{longtable}
+\usepackage{subcaption} 
+\usepackage[utf8]{inputenc}
+\usepackage{ragged2e}   
+
 
 \title{Rapport ECL - Template} %Titre du fichier
 
@@ -48,9 +53,9 @@
 \section{Introduction} 
 Pour la réalisation de ce projet, une revue de littérature s’est naturellement imposée. Parmi les ressources pertinentes, nous avons trouvé plusieurs travaux particulièrement intéressants. 
 
-En premier lieu, nous avons étudié le document sur l'argumentation computationnelle, notamment le cours d'Élise Bonzon, qui nous a servi de base pour comprendre les concepts fondamentaux. 
-Nous avons également exploré l'article \textit{An Introduction to Argumentation Semantics}, qui propose des définitions assez approfondies des différentes sémantiques de l'argumentation. 
-Enfin, l’étude des algorithmes pour les sémantiques d'argumentation, présentée dans \textit{Algorithms for Argumentation Semantics: Labeling Attacks as a Generalization of Labeling Arguments}, 
+En premier lieu, nous avons étudié le cours d'Élise Bonzon sur l'argumentation computationnelle \cite{a}, notamment , qui nous a servi de base pour comprendre les concepts fondamentaux. 
+Nous avons également exploré l'article \textit{An Introduction to Argumentation Semantics} \cite{b}, qui propose des définitions assez approfondies des différentes sémantiques de l'argumentation. 
+Enfin, l’étude des algorithmes pour les sémantiques d'argumentation, présentée dans \textit{Algorithms for Argumentation Semantics: Labeling Attacks as a Generalization of Labeling Arguments} \cite{c}, 
 nous a permis d’approfondir nos connaissances sur les algorithmes utilisés dans ce domaine et ainsi implémenter la solution du projet présent. 
 
 Cette exploration nous a permis de définir les objectifs du projet, présentés dans la section suivante.
@@ -72,7 +77,7 @@ Le projet propose également une interface visuelle  representant les arguments,
 \subsection{Algorithmes}
 Les algorithmes utilisés pour l'implémentation de ce projet sont spécifiquement ceux dédiés à l'énumération des extensions complètes 
 et stables. Ces algorithmes sont issus des travaux présentés dans l'article 
-\textit{"Algorithms for Argumentation Semantics: Labeling Attacks as a Generalization of Labeling Arguments"} [1].
+\textit{"Algorithms for Argumentation Semantics: Labeling Attacks as a Generalization of Labeling Arguments"}  \cite{c}.
 Pour les deux algorithmes qui seront présentés dessous, tournera autour autour de l'utilisation d'étiquettes qui sont IN, OUT,  {MUST\_OUT}, BLANK et UNDEC.
 {MUST\_OUT} et BLANK n'ayant pas été abordé en cours, sont en effet ici des détails d'implémentation.
 
@@ -86,7 +91,7 @@ arguments \textbf{IN}. Enfin, l'étiquette \textbf{UNDEC} désigne les arguments
 \begin{itemize}
     \item Énumération des extensions stables.
     
-	L'algorithme ci-dessous identifie toutes les extensions stables d’un AF $(A, R)$, comme décrit dans [] (p. 642). %\cite{ref}  
+	L'algorithme ci-dessous identifie toutes les extensions stables d’un AF $(A, R)$ \cite{c} (p. 642). %\cite{ref}  
 	On remarque l'absence d'utilisation du label \textbf{UNDEC}. La sémantique du label \textbf{MUST\_OUT} peut être interprétée comme celle 
 	d'un \textbf{UNDEC} qui attaque un argument étiqueté \(\textbf{IN}\). 
 	Cependant, dans une labellisation visant à identifier une extension stable, aucun argument ne devrait rester étiqueté \textbf{UNDEC} à 
@@ -176,7 +181,7 @@ l'exécution du bloc suivant l'appel récursif est mise dans la pile d'exécutio
 \newpage
 
 \item Énumération des extensions complètes.
-L'algorithme ci dessous de identifie toutes les extensions complètes d’un AF (A,R) correspond[1] (p.644).
+L'algorithme ci dessous de identifie toutes les extensions complètes d’un AF (A,R)  \cite{c} (p.644).
 
 \begin{algorithm}
     \caption{Enumerating all complete extensions of an AF $(A, R)$}
@@ -293,6 +298,87 @@ L'architecture du projet repose sur l'utilisation de classes et de méthodes afi
     \item \textbf{af\_visualizer.py} : Ce fichier gère l'interface graphique de l'application. Il est basé sur les mêmes méthodes des fichiers précédemment mentionnés, permettant une interaction visuelle avec l'utilisateur pour soumettre des fichiers et afficher les résultats sous une forme graphique.
 \end{itemize}
 
+\subsection{Tests et validation}
 
+Pour vérifier l'exactitude de notre implémentation des algorithmes d'énumération des extensions stables et complètes, nous avons réalisé des tests sur plusieurs frameworks argumentatifs. Les commandes utilisées, ainsi que les résultats correspondants (captures de la console et de l'interface graphique), sont présentés ci-dessous.
+
+\vspace{0.5cm}
+\noindent
+
+
+\begin{longtable}{|p{7cm}|p{7cm}|}
+	\hline
+	\textbf{Commande exécutée} & \textbf{Résultats (console et interface graphique)} \\ 
+	\hline
+	\endfirsthead
+	\hline
+	\textbf{Commande exécutée} & \textbf{Résultats (console et interface graphique)} \\ 
+	\hline
+	\endhead
+	\hline
+	\endfoot
+	
+
+	\texttt{python main.py -p SE-CO -f ./tests/af1.apx} & 
+	\begin{minipage}{\linewidth}
+		\centering
+		\includegraphics[width=\linewidth]{img/console_af1.png} \\[0.2cm]
+		\includegraphics[width=\linewidth]{img/console_af1.png}
+	\end{minipage} \\[0.2cm]
+
+
+	
+	\hline
+	\texttt{python main.py -p SE-} & 
+	\begin{itemize}
+		\item Capture de la sortie console.
+		\item Capture de l'interface graphique.
+	\end{itemize} \\
+	\hline
+	\texttt{python main.py } & 
+	\begin{itemize}
+		\item Capture de la sortie console.
+		\item Capture de l'interface graphique.
+	\end{itemize} \\
+	\hline
+	\texttt{python main.py -p DS-SE -f ./tests/af4.apx -a arg3} & 
+	\begin{itemize}
+		\item Capture de la sortie console.
+		\item Capture de l'interface graphique.
+	\end{itemize} \\
+	\hline
+	\texttt{python main.py -p DC-SE -f ./tests/af4.apx -a arg3} & 
+	\begin{itemize}
+		\item Capture de la sortie console.
+		\item Capture de l'interface graphique.
+	\end{itemize} \\
+	\hline
+	\texttt{python main.py -p DC-SE -f ./tests/af5.apx -a arg3} & 
+	\begin{itemize}
+		\item Capture de la sortie console.
+		\item Capture de l'interface graphique.
+	\end{itemize} \\
+
+	\end{longtable}
+
+
+
+
+\vspace{0.5cm}
+\noindent
+Les résultats obtenus confirment le bon fonctionnement de notre implémentation des algorithmes. Les extensions calculées correspondent aux attentes théoriques pour chaque cas testé, validant ainsi l'exactitude de notre implémentation.
+
+
+\section*{Conclusion}
+En conclusion, ce projet a été l'occasion d'élargir nos connaissances sur les systèmes d'argumentation abstraits, 
+à travers une revue de littérature et l'implémentation pratique d'algorithmes d'énumération des extensions. 
+
+L'intégration de ces algorithmes dans un outil fonctionnel a permis de concrétiser nos apprentissages. 
+Ce travail constitue une contribution significative à l'application des théories de l'argumentation et ouvre la voie à des perspectives d'amélioration.
+
+
+
+\bibliographystyle{unsrt} 
+\bibliography{mybib}
 
 \end{document}

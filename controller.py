@@ -3,6 +3,7 @@ from computing_methods import find_stable_extensions,find_complete_extensions
 from utilities import file_reader
 import random
 from argSys import ArgSys
+from utilities import Label
 
 '''
 On fait des print et return dans nos methodes d'appel pour les raisons suivantes: 
@@ -11,26 +12,31 @@ On fait des print et return dans nos methodes d'appel pour les raisons suivantes
    mis en place à cet effet
 '''
 
-
 def process_se_co():
     
     lab = initialize_lab(ArgSys.arguments)
     completes = []
-    find_complete_extensions(lab,ArgSys.arguments, ArgSys.attaques, completes)   
+    find_complete_extensions(lab,ArgSys.arguments, ArgSys.attaques, completes)  
     ensemble_au_hasard = choose_random_extension(completes)
+  
     if ensemble_au_hasard:
-        print(ensemble_au_hasard)       
-        return ensemble_au_hasard       
+        print('\n Extension complète: ',ensemble_au_hasard, end='\n')
+        print('\n======Toutes les extensions complètes========', end='\n')
+        print(completes, end='\n')      
+        return completes       
                                         
 def process_se_st():
     
     lab = initialize_lab(ArgSys.arguments)
     estables = []
-    find_stable_extensions(lab,ArgSys.arguments, ArgSys.attaques, estables)   
+    find_stable_extensions(lab,ArgSys.arguments, ArgSys.attaques, estables) 
+   
     ensemble_au_hasard = choose_random_extension(estables)
     if ensemble_au_hasard:
-        print(ensemble_au_hasard)
-        return ensemble_au_hasard
+        print('\n Extension stable: ',ensemble_au_hasard, end='\n')
+        print('\n======Toutes les extensions stables========', end='\n')
+        print(estables, end='\n')
+        return estables
 
 def process_dc_co(argument):
     
@@ -118,7 +124,7 @@ def handle_parameters(args):
             
 
 def initialize_lab(arguments):
-    return {arg: "BLANK" for arg in arguments}
+    return {arg: Label.BLANK for arg in arguments}
 
 def check_argument_in_extensions(argument, extensions):
     for ext in extensions:

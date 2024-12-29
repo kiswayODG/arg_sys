@@ -26,27 +26,31 @@ class Semantic(Enum):
     DC_ST = "DC-ST"
     DS_ST = "DS-ST"
     
+from collections import defaultdict
+import sys
+
 def file_reader(file_path):
-    arguments = set()
+    arguments = []
     attacks = defaultdict(set)
     try:
         with open(file_path, 'r') as file:
             for line in file:
                 line = line.strip()
-                if line.startswith('arg(') and line.endswith(').'):
-                    arg = line[4:-2]
-                    arguments.add(arg)
-                elif line.startswith('att(') and line.endswith(').'):
-                    att = line[4:-2].split(',')
-                    attacks[att[0]].add(att[1])
+                if line.startswith('arg(') and (line.endswith(').') or line.endswith(')')):
+                    arg = line[4:].rstrip(').')  
+                    arguments.append(arg)
+                elif line.startswith('att(') and (line.endswith(').') or line.endswith(')')):
+                    att = line[4:].rstrip(').').split(',')
+                    if len(att) == 2:  
+                        attacks[att[0]].add(att[1])
     except FileNotFoundError:
         print(f"Erreur : Le fichier '{file_path}' est introuvable.")
         sys.exit(1)
     except Exception as e:
         print(f"Erreur inattendue : {str(e)}")
         sys.exit(1)
-
     return arguments, attacks
+
 
 def parse_arguments():
     """

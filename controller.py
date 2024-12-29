@@ -1,7 +1,7 @@
 import sys
 from computing_methods import find_stable_extensions,find_complete_extensions
 from utilities import file_reader
-import random
+from utilities import choose_random_extension
 from argSys import ArgSys
 from utilities import Label
 
@@ -22,7 +22,7 @@ def process_se_co():
     if ensemble_au_hasard:
         print('\n Extension complète: ',ensemble_au_hasard, end='\n')
         print('\n======Toutes les extensions complètes========', end='\n')
-        print(completes, end='\n')      
+        print(completes, end='\n\n')      
         return completes       
                                         
 def process_se_st():
@@ -35,7 +35,7 @@ def process_se_st():
     if ensemble_au_hasard:
         print('\n Extension stable: ',ensemble_au_hasard, end='\n')
         print('\n======Toutes les extensions stables========', end='\n')
-        print(estables, end='\n')
+        print(estables, end='\n\n')
         return estables
 
 def process_dc_co(argument):
@@ -132,10 +132,7 @@ def check_argument_in_extensions(argument, extensions):
             return True
     return False
 
-def choose_random_extension(extensions):
-    if len(extensions) > 0:
-        return random.choice(extensions)
-    return None
+
 
 
 def handle_semanticfrom_screen(semantic,arg=''):

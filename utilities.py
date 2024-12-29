@@ -2,6 +2,7 @@ from collections import defaultdict
 import sys
 from enum import Enum
 import argparse
+import random
 
 class Label(Enum):
     BLANK = 0
@@ -68,4 +69,12 @@ def parse_arguments():
                         help="Nom de l'argument de la requête (obligatoire pour DC/DS)")
 
     return parser.parse_args()
+
+def choose_random_extension(extensions):
+    type(extensions)
+    try:
+        if len(extensions) > 0:
+            return random.choice(extensions)
+    except :
+        return "Reessayer inhabituelle, une erreur survenu!"
 

@@ -32,74 +32,69 @@
 
 %------------ Corps du rapport ----------------
 \begin{abstract}
-	Ce rapport présente le travail réalisé dans le cadre du développement d’un outil informatique dédié à la résolution de problèmes 
-	dans le domaine des systèmes d’argumentation abstraits. Nous avons commencé par une exploration approfondie des algorithmes de 
-	calcul des extensions complètes et stables, en nous appuyant sur des travaux de recherche issus de la littérature scientifique 
-	sur l’argumentation. Ces algorithmes ont été décrits en détail, accompagnés d’explications sur leurs mécanismes et les structures 
+	Ce rapport présente le travail réalisé dans le cadre du développement d’un outil dédié à la résolution de problèmes 
+	dans le domaine des systèmes d’argumentation abstraits. Nous avons commencé par une exploration des algorithmes de 
+	calcul des extensions complètes et stables, en nous appuyant sur des travaux de recherche sur l’argumentation. Ces 
+	algorithmes ont été décrits, accompagnés d’explications sur leurs mécanismes et les structures 
 	de données utilisées pour leur implémentation.
 
-    Grâce à ces algorithmes, nous avons pu répondre aux problématiques posées dans le sujet du projet, telles que la détermination 
+    Sur la base de ces algorithmes, nous avons pu répondre aux problématiques posées dans le sujet du projet, telles que la détermination 
 	des extensions d’un système d’argumentation donné et l’évaluation de l’appartenance d’un argument à une extension.
 
-    En complément, nous avons développé une interface graphique conviviale permettant de visualiser les systèmes d’argumentation, 
-	leurs arguments, et les relations entre eux, offrant ainsi une meilleure interaction utilisateur et facilitant l’analyse des 
-	résultats. Ce rapport détaille les méthodologies employées, les choix techniques effectués et les résultats obtenus, illustrant 
-	ainsi notre contribution à la mise en œuvre pratique des concepts théoriques de l’argumentation.
+    En complément, une interface graphique permettant de visualiser les systèmes d’argumentation, 
+	leurs arguments, et les relations entre eux, a été développer pour faciliter l’analyse des résultats. 
 \end{abstract}
 
 \newpage % Crée une nouvelle page après l'abstract
 
 
 \section{Introduction} 
-Pour la réalisation de ce projet, une revue de littérature s’est naturellement imposée. Parmi les ressources pertinentes, nous avons trouvé plusieurs travaux particulièrement intéressants. 
+Ce projet a nécessité une revue de littérature, au cours de laquelle nous avons identifié des ressources clés pour notre travail.
 
-En premier lieu, nous avons étudié le cours d'Élise Bonzon sur l'argumentation computationnelle \cite{a}, notamment , qui nous a servi de base pour comprendre les concepts fondamentaux. 
-Nous avons également exploré l'article \textit{An Introduction to Argumentation Semantics} \cite{b}, qui propose des définitions assez approfondies des différentes sémantiques de l'argumentation. 
+
+Tout d'abord, le cours d'Élise Bonzon sur l'argumentation computationnelle \cite{a} nous a offert une base pour appréhender les concepts fondamentaux. 
+Ensuite l'article \textit{An Introduction to Argumentation Semantics} \cite{b}, qui propose des définitions assez approfondies des différentes sémantiques de l'argumentation. 
 Enfin, l’étude des algorithmes pour les sémantiques d'argumentation, présentée dans \textit{Algorithms for Argumentation Semantics: Labeling Attacks as a Generalization of Labeling Arguments} \cite{c}, 
 nous a permis d’approfondir nos connaissances sur les algorithmes utilisés dans ce domaine et ainsi implémenter la solution du projet présent. 
 
-Cette exploration nous a permis de définir les objectifs du projet, présentés dans la section suivante.
+
+Ces travaux de référence ont guidé notre démarche et orienté la définition des objectifs ainsi que des fonctionnalités attendues, conformément aux directives de l'énoncé.
 
 \section{Objectifs et fonctionnalités attendues du projet}
-Ce projet vise à développer un outil capable de résoudre des problèmes spécifiques liés aux systèmes d'argumentation abstraits (AF). 
-Un système d'argumentation est défini par un ensemble d'arguments (A) et une relation d'attaque (R) entre ces arguments. 
-L'objectif est de fournir une solution capable d’identifier les extensions complètes et stables, et évaluer l’appartenance 
-d’un argument à ces extensions selon des critères crédibles ou sceptiques.
-
-Le programme lit un système d'argumentation à partir d'un fichier texte formaté, analyse les données, et produit des résultats conformes selon la sémantique utilisée. 
+Ce projet à pour objectif la mise en place d'une solution destiné à résoudre des problèmes spécifiques liés aux systèmes d'argumentation abstraits (AF). 
+Un système d'argumentation est défini par un ensemble d'arguments (A) et d’un ensemble de relations d'attaque (R) entre ces arguments. 
+L’enjeu principal est donc de concevoir l'outil capable pour identifier les extensions complètes et stables, tout en évaluant l’appartenance d’un argument données à ces extensions, selon des critères crédibles ou sceptiques.
 
 
-Le projet propose également une interface visuelle  representant les arguments, leurs relations sous forme de graphes et ainsi que les résultats des analyses pour faciliter l’interaction utilisateur et l’interprétation des résultats.
-
+Le programme est conçu pour lire un système d'argumentation à partir d’un fichier texte formaté, analyser les données et produire des résultats conformes à la sémantique utilisée. Initialement prévu pour fonctionner en mode console, il a été enrichi par l’ajout d’une interface graphique
 \section{Algorithmes et structures de données} 
 
 
 \subsection{Algorithmes}
 Les algorithmes utilisés pour l'implémentation de ce projet sont spécifiquement ceux dédiés à l'énumération des extensions complètes 
 et stables. Ces algorithmes sont issus des travaux présentés dans l'article 
-\textit{"Algorithms for Argumentation Semantics: Labeling Attacks as a Generalization of Labeling Arguments"}  \cite{c}.
-Pour les deux algorithmes qui seront présentés dessous, tournera autour autour de l'utilisation d'étiquettes qui sont IN, OUT,  {MUST\_OUT}, BLANK et UNDEC.
-{MUST\_OUT} et BLANK n'ayant pas été abordé en cours, sont en effet ici des détails d'implémentation.
+\textit{"Algorithms for Argumentation Semantics: Labeling Attacks as a Generalization of Labeling Arguments"} \cite{c}.
+Les deux algorithmes présentés ci-dessous s’appuient sur l’utilisation d’étiquettes qui sont IN, OUT,  {MUST\_OUT}, BLANK et UNDEC.
+{MUST\_OUT} et BLANK, qui n’ont pas été abordés en cours, peuvent être considérés ici comme des détails propres à l’implémentation.
 
-
-L'étiquette \textbf{IN} identifie les arguments qui pourraient appartenir à  l'extension recherchée. L'étiquette \textbf{OUT} 
-identifie un argument qui est attaqué par un argument \textbf{IN}. L'étiquette \textbf{BLANK} est attribuée à tout argument non 
-traité dont l'étiquette finale n'est pas encore déterminée. L'étiquette \textbf{ {MUST\_OUT}} identifie les arguments qui attaquent des 
-arguments \textbf{IN}. Enfin, l'étiquette \textbf{UNDEC} désigne les arguments qui pourraient ne pas être inclus dans  l'extension, car ils pourraient ne pas être défendus par un argument \textbf{IN}.
+L'étiquette {IN} identifie les arguments qui peuvent appartenir à  l'extension recherchée. L'étiquette {OUT} 
+identifie un argument qui est attaqué par un argument {IN}. L'étiquette {BLANK} est attribuée à tout argument non 
+traité dont l'étiquette finale n'est pas encore déterminée. L'étiquette {MUST\_OUT} identifie les arguments qui attaquent des 
+arguments {IN}. Enfin, l'étiquette {UNDEC} désigne les arguments qui pourraient ne pas être inclus dans  l'extension, car ils pourraient ne pas être défendus par un argument {IN}.
 
 
 \begin{itemize}
     \item Énumération des extensions stables.
     
 	L'algorithme ci-dessous identifie toutes les extensions stables d’un AF $(A, R)$ \cite{c} (p. 642). %\cite{ref}  
-	On remarque l'absence d'utilisation du label \textbf{UNDEC}. La sémantique du label \textbf{MUST\_OUT} peut être interprétée comme celle 
-	d'un \textbf{UNDEC} qui attaque un argument étiqueté \(\textbf{IN}\). 
-	Cependant, dans une labellisation visant à identifier une extension stable, aucun argument ne devrait rester étiqueté \textbf{UNDEC} à 
+	On remarque l'absence d'utilisation du label {UNDEC}. La sémantique du label {MUST\_OUT} peut être interprétée comme celle 
+	d'un {UNDEC} mais attaquant un argument étiqueté \({IN}\). 
+	Cependant, dans une labellisation visant à identifier une extension stable, aucun argument ne devrait rester étiqueté {UNDEC} à 
 	la fin. 
 
-	C'est pourquoi le label \textbf{MUST\_OUT} est utilisé à la ligne 34 pour désigner les arguments susceptibles d'évoluer 
-	vers \textbf{OUT} à la fin de la labellisation. Ainsi, un ensemble d'arguments \( S \), étiqueté \(\textbf{IN}\), est 
-	considéré comme stable uniquement s'il n'existe aucun argument étiqueté \textbf{MUST\_OUT} à l'issue de la labellisation.
+	Le label {MUST\_OUT} est utilisé pour désigner les arguments attaquant des label {IN} et susceptibles d'évoluer 
+	vers {OUT} à la fin de la labellisation. Ainsi, un ensemble d'arguments \( S \), étiqueté \({IN}\), est 
+	considéré comme stable uniquement s'il n'existe aucun argument étiqueté {MUST\_OUT} à l'issue d'une labellisation de tous les Arguments.
 
 	\begin{algorithm}
 		\caption{Enumerating all stable extensions of an AF $(A, R)$}
@@ -156,32 +151,35 @@ et $\{y\}^+$ l'ensemble des arguments attaqués par $y$.
 Le processus commence par l'initialisation des arguments avec un label  {BLANK}, signifiant qu'aucun argument n'a encore été catégorisé. 
 Ensuite, l'algorithme cherche à trouver toutes les extensions stables possibles en étiquetant les arguments de manière appropriée. 
 Tant qu'il existe des arguments non étiquetés, l'algorithme sélectionne un argument \( y \) avec un label  {BLANK}. 
-Le critère de sélection dépend de la situation : si l'argument \( y \) n'a pas d'attaquants non étiquetés (c'est-à-dire que tous ses attaquants ont déjà été étiquetés comme  {OUT} ou ), il est selectionné, 
-ce qui signifie qu'il fait partie de l'extension.  Dans le cas contraire, l'algorithme choisit un argument \( y \) de manière à maximiser le nombre d'arguments attaqués par \( y \) (\( {y}^+ \)) qui ne sont pas encore étiquetés \(  {OUT} \).
+Le critère de sélection dépend de la situation : si l'argument \( y \)  est {BLANK} avec ses attaquants  {OUT} ou {MUST\_OUT}, il est selectionné pour être labellisé {IN}. 
+Dans le cas contraire, l'algorithme choisit un argument \( y \) de manière à maximiser le nombre d'arguments attaqués par \( y \) (l'ensemble \( {y}^+ \)) qui ne sont pas encore étiquetés \( {OUT} \).
 
 
-Une copie complète de l'état des labels est effectuée pour la propagation des étiquettes (Lab' <- Lab)
+Une copie  de l'état des labels est effectuée pour une première propagation des étiquettes (Lab' <- Lab).
 
 
-Une fois un argument sélectionné et étiqueté  {IN}, l'algorithme modifie les labels des arguments attaqués par \( y \). Tous les arguments attaqués par \( y \) (les voisins de \( y \) dans l'ensemble \( \{y\}^+ \)) reçoivent le label  {OUT}, indiquant qu'ils sont exclus de l'extension. 
-Les arguments voisins attaquant \( y \) \(\in\) \( \{y\}^- \) mais qui ne sont pas encore étiquetés ( {BLANK}) reçoivent le label  { MUST\_OUT}, signifiant qu'ils doivent être exclus de manière forcée et ne peuvent pas faire partie de l'extension. 
+Les éléments de l'ensemble \( \{y\}^+ \)) reçoivent le label  {OUT}, indiquant qu'ils sont exclus de l'extension, car attaqué par y. 
+Les arguments voisins attaquant \( y \) correspondant aux éléments de \( \{y\}^- \) mais qui ne sont pas encore traités ({BLANK}) reçoivent le label {MUST\_OUT}, ils doivent être exclus et ne peuvent pas faire partie de l'extension. 
 
-Si tous les attaquants \( \{z\}^- \) d'un argument \( z \) sont déjà étiquetés autre que ( {BLANK}), cela entraîne la mise à jour du label de \( y \) en  { MUST\_OUT} l'état des labels original, 
-car l'argument \( y \) devient ainsi incompatible avec l'extension en cours et on execute un retour anticipé au début de la boucle while.
+Si l'argument \( z \), qui était jusqu'à présent non traité, a tous ses attaquants déjà étiquetés autre que \texttt{BLANK}, 
+cela entraîne la mise à jour du label de \( y \) en \texttt{MUST\_OUT}. En effet, cela signifie que \( y \) devient incompatible 
+avec l'extension en cours. Dans ce cas, on effectue un retour anticipé au début de la boucle.
+
 
 Une fois que les labels ont été modifiés, l'algorithme procède à une exploration récursive en appelant à nouveau la procédure pour tester de nouvelles configurations. 
-
 
 On s'assure qu'il n'existe aucun argument \( z \) dans l'ensemble \( \{y\}^- \) qui soit étiqueté \(  {BLANK} \) dans l'état \( Lab \). Si tel est le cas, l'argument \( y \) est étiqueté \(  {MUST\_OUT} \). Sinon, l'état \( Lab \) est mis à jour pour être égal à l'état tampon \( Lab' \).
 
 Si tous les arguments attaqués par \( y \) ont des labels autres que  { MUST\_OUT}, l'extension est considérée comme stable et l'ensemble des arguments étiquetés  {IN} est ajouté à l'ensemble des extensions stables.
 
-l'exécution du bloc suivant l'appel récursif est mise dans la pile d'exécution, et elle sera traitée après tous les appels récursifs.
+L'exécution du bloc suivant l'appel récursif est mise dans la pile d'exécution, et elle sera traitée après tous les appels récursifs.
 
 \newpage
 
 \item Énumération des extensions complètes.
-L'algorithme ci dessous de identifie toutes les extensions complètes d’un AF (A,R)  \cite{c} (p.644).
+
+
+L'algorithme ci dessous de identifie toutes les extensions complètes d’un AF (A,R) \cite{c} (p.644).
 
 \begin{algorithm}
     \caption{Enumerating all complete extensions of an AF $(A, R)$}
@@ -232,18 +230,20 @@ L'algorithme ci dessous de identifie toutes les extensions complètes d’un AF 
     \end{algorithmic}
 \end{algorithm}
 
- L'algorithme est repose sur le même principe que le préccédent avec quelques petits changements pour satisfaire les conditions d'extension stable.
- On part toujours sur la base d'arguments tous etiquettés à blanc;  le critère de selection d'argument pour la propagation des labels restant le même.
- On constate l'utilisation du label UNDEC ici lorsqu'une incompatibilité est levé en lieu et place de MUST\_OUT dans l'algorithm 1.
+ L'algorithme 2 repose sur le même principe que le préccédent avec quelques petits changements pour satisfaire les conditions d'extension stable.
+ On part toujours sur la base d'arguments tous etiquettés à blanc;  le critère de selection d'argument pour la propagation des labels reste le même.
+ On remarque l'utilisation du label UNDEC ici pour indiquer une indécision, alors que cette situation avait immédiatement été 
+ rejetée dans l'algorithme 1 en tant qu'incompatibilité, en la plaçant sous le label MUST\_OUT.
+
  
  on détermine si un ensemble \( S \) (les éléments dont le label est \( \text{IN} \)) est une extension complète en vérifiant 
  deux conditions. 
 
  	\begin{enumerate}
 		\item Tout d'abord, garantir qu' aucun élément \( x \) de \( A \) n'est marqué 
-		comme \( \text{MUST OUT} \).
+		comme \( \text{MUST\_OUT} \).
 		\item Ensuite, on vérifie qu'il n'existe pas un élément \( z \) 
-		qui reste indéterminé (\( \text{UNDEC} \) ou \( \text{BLANK} \)) et qui aurait tous ses attaquants (les éléments de \( \{z\}^- \)) déjà marqués comme \( \text{OUT} \).
+		qui reste indéterminé (\( \text{UNDEC} \) ou \( \text{BLANK} \)) et qui aurait tous ses attaquants (les éléments de \( \{z\}^- \)) déjà marqués  \( {OUT} \).
 	\end{enumerate}
 
 \end{itemize}
@@ -257,13 +257,13 @@ La manipulation des données dans le projet repose essentiellement sur l’utili
 \begin{itemize}
     \item Les arguments sont stockés dans une liste ou un ensemble. Par exemple : 
     \[
-    {arguments = \{"A", "B", "C"\}}
+    {arguments = \{'A', 'B', 'C'\}}
     \]
     où \( A \), \( B \) et \( C \) représentent les arguments.
 
     \item Les attaques sont représentées par un dictionnaire, chaque clé correspondant à un argument et la valeur étant l’ensemble des arguments qu’il attaque. Par exemple :
     \[
-    {attacks = \{"A": \{"B", "C"\}, "B": \{"C"\}\}}
+    {attacks = \{'A': \{'B', 'C'\}, 'B': \{'C'\}\}}
     \]
     Ici, \( A \) attaque \( B \) et \( C \), tandis que \( B \) attaque \( C \).
 \end{itemize}
@@ -296,12 +296,13 @@ L'architecture du projet repose sur l'utilisation de classes et de méthodes afi
     \item \textbf{computing\_methods.py} : Ce fichier contient l'implémentation des algorithmes d'énumération des extensions complètes et stables. Afin de garantir une bonne lisibilité du code, les parties répétitives dans les algorithmes ont été extraites et regroupées dans des méthodes uniques. Par exemple, la méthode \texttt{select\_argument} est utilisée pour sélectionner un argument dans les différents algorithmes afin de réduire la duplication du code.
 
     \item \textbf{af\_visualizer.py} : Ce fichier gère l'interface graphique de l'application. Il est basé sur les mêmes méthodes des fichiers précédemment mentionnés, permettant une interaction visuelle avec l'utilisateur pour soumettre des fichiers et afficher les résultats sous une forme graphique.
+
 \end{itemize}
 
 \subsection{Tests et validation}
 
-Pour vérifier l'exactitude de notre implémentation des algorithmes d'énumération des extensions stables et complètes, nous avons réalisé des tests sur plusieurs frameworks argumentatifs. Les commandes utilisées, ainsi que les résultats correspondants (captures de la console et de l'interface graphique), sont présentés ci-dessous.
-
+Pour vérifier l'exactitude de notre implémentation des algorithmes d'énumération des extensions stables et complètes, nous avons réalisé des tests sur plusieurs frameworks argumentatifs. Dans le tableau dessous nos recensons les résultats de quelques tests. 
+Les fichiers de test, au format .apx, se trouvent dans un répertoire "tests" au sein du projet. Ces fichiers sont reçus en entrée, car ils contiennent la description des systèmes d'argumentation abstraits (AF).
 \vspace{0.5cm}
 \noindent
 
@@ -319,45 +320,31 @@ Pour vérifier l'exactitude de notre implémentation des algorithmes d'énuméra
 	\endfoot
 	
 
-	\texttt{python main.py -p SE-CO -f ./tests/af1.apx} & 
+	\texttt{python .\textbackslash main.py -p SE-CO -f .\textbackslash tests\textbackslash test\_af2.apx} & 
 	\begin{minipage}{\linewidth}
 		\centering
-		\includegraphics[width=\linewidth]{img/console_af1.png} \\[0.2cm]
-		\includegraphics[width=\linewidth]{img/console_af1.png}
+		\includegraphics[width=\linewidth]{img/a_consol.png} \\[0.2cm]
+		\includegraphics[width=\linewidth]{img/a_ui.png}
 	\end{minipage} \\[0.2cm]
-
 
 	
 	\hline
-	\texttt{python main.py -p SE-} & 
-	\begin{itemize}
-		\item Capture de la sortie console.
-		\item Capture de l'interface graphique.
-	\end{itemize} \\
+	\texttt{python .\textbackslash main.py -p DC-CO -f .\textbackslash tests\textbackslash test\_af2.apx -a 'B'} & 
+	\begin{minipage}{\linewidth}
+		\centering
+		\includegraphics[width=\linewidth]{img/b_consol.png} \\[0.2cm]
+		\includegraphics[width=\linewidth]{img/b_ui.png}
+	\end{minipage} \\[0.2cm] \\
 	\hline
-	\texttt{python main.py } & 
-	\begin{itemize}
-		\item Capture de la sortie console.
-		\item Capture de l'interface graphique.
-	\end{itemize} \\
-	\hline
-	\texttt{python main.py -p DS-SE -f ./tests/af4.apx -a arg3} & 
-	\begin{itemize}
-		\item Capture de la sortie console.
-		\item Capture de l'interface graphique.
-	\end{itemize} \\
-	\hline
-	\texttt{python main.py -p DC-SE -f ./tests/af4.apx -a arg3} & 
-	\begin{itemize}
-		\item Capture de la sortie console.
-		\item Capture de l'interface graphique.
-	\end{itemize} \\
-	\hline
-	\texttt{python main.py -p DC-SE -f ./tests/af5.apx -a arg3} & 
-	\begin{itemize}
-		\item Capture de la sortie console.
-		\item Capture de l'interface graphique.
-	\end{itemize} \\
+
+
+	\texttt{python .\textbackslash main.py -p SE-ST -f .\textbackslash tests\textbackslash test\_af4.apx} & 
+	\begin{minipage}{\linewidth}
+		\centering
+		\includegraphics[width=\linewidth]{img/c_consol.png} \\[0.2cm]
+		\includegraphics[width=\linewidth]{img/c_ui.png}
+	\end{minipage} \\[0.2cm] \\
+	\caption{La commande pour lancer l'interface graphique est \texttt{python af\_visualizer.py}.}
 
 	\end{longtable}
 
@@ -366,15 +353,19 @@ Pour vérifier l'exactitude de notre implémentation des algorithmes d'énuméra
 
 \vspace{0.5cm}
 \noindent
-Les résultats obtenus confirment le bon fonctionnement de notre implémentation des algorithmes. Les extensions calculées correspondent aux attentes théoriques pour chaque cas testé, validant ainsi l'exactitude de notre implémentation.
+
+Les résultats de nos tests confirment le bon fonctionnement de notre implémentation des algorithmes. Les extensions calculées correspondent aux attentes théoriques pour chaque cas testé, validant ainsi l'exactitude de notre implémentation.
+
+\subsubsection{Remarque sur les fichiers de test.} 
+Dans le cadre des tests réalisés, nous avons constaté une petite disparité dans les formats des fichiers fournis. En effet, alors que les spécifications de l'énoncé imposaient que chaque ligne décrivant un argument ou une attaque se termine par un point (par exemple, \texttt{arg(a).} ou \texttt{att(a,b).}), certains fichiers de test présentaient des lignes sans point final, comme \texttt{arg(a)} ou \texttt{att(a,b)}. Afin de garantir une compatibilité avec ces fichiers, notre implémentation a été adaptée pour gérer les deux formats. 
 
 
-\section*{Conclusion}
+\section{Conclusion}
 En conclusion, ce projet a été l'occasion d'élargir nos connaissances sur les systèmes d'argumentation abstraits, 
-à travers une revue de littérature et l'implémentation pratique d'algorithmes d'énumération des extensions. 
+à travers une revue de littérature et l'implémentation pratique d'algorithmes d'énumération d'extensions. 
 
-L'intégration de ces algorithmes dans un outil fonctionnel a permis de concrétiser nos apprentissages. 
-Ce travail constitue une contribution significative à l'application des théories de l'argumentation et ouvre la voie à des perspectives d'amélioration.
+L'intégration de ces algorithmes dans un outil fonctionnel a permis de concrétiser notre apprentissage. 
+Ce travail constitue une contribution à l'application des théories de l'argumentation et ouvre la voie à des perspectives d'amélioration.
 
 
 

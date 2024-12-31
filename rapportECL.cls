@@ -48,7 +48,7 @@
 \newcommand{\fairepagedegarde}{
 \begin{titlepage}
 
-\ThisLRCornerWallPaper{0.4}{logos/SteinECL.jpg}
+%\ThisLRCornerWallPaper{0.5}{logos/logoNB.pdf}
 	\centering %Centraliser le contenu
 	\includesvg[width=0.4\textwidth]{logos/logo}\par\vspace{1cm} % Insertion du logo 
 	{\scshape\LARGE Université Paris Cité \par} %Nom de l'université

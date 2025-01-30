@@ -69,7 +69,7 @@ Quelques captures d'écran :
   </tr>
   <tr>
     <td><img src="img/c_consol.png" alt="Console C" width="300"></td>
-    <td><img src="img/b_ui.png" alt="Interface B" width="300"></td>
+    <td><img src="img/c_ui.png" alt="Interface B" width="300"></td>
   </tr>
 </table>
 
@@ -97,4 +97,4 @@ N’hésitez pas à donner vos retours ou à contribuer au projet ! 😊
 
 
 ---
-🌍 **LinkedIn : [https://www.linkedin.com/in/ulricho-5185bf-world/]** | 📂 **GitHub : [Lien vers le dépôt]**
+🌍 **[LinkedIn] : (https://www.linkedin.com/in/ulricho-5185bf-world/)** | 📂 **[GitHub] : (https://github.com/kiswayODG/arg_sys)**

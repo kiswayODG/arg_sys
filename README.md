@@ -60,14 +60,14 @@ YES
 Quelques captures d'écran :
 <table>
   <tr>
-    <td><img src="img/a_consol.png" alt="Console A" width="300">
+    <td><img src="img/a_consol.png" alt="Console A" width="300"> <br/> <br/>
       <img src="img/a_ui.png" alt="Interface A" width="300">
     </td>
-    <td><img src="img/b_consol.png" alt="Console B" width="300">
+    <td><img src="img/b_consol.png" alt="Console B" width="300"><br/> <br/>
     <img src="img/b_ui.png" alt="Interface B" width="300"></td>
   </tr>
   <tr>
-    <td><img src="img/c_consol.png" alt="Console C" width="300">
+    <td><img src="img/c_consol.png" alt="Console C" width="300"> <br/> <br/>
     <img src="img/c_ui.png" alt="Interface B" width="300"></td>
   </tr>
 </table>

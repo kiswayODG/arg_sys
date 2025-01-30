@@ -354,7 +354,11 @@ Les fichiers de test, au format .apx, se trouvent dans un répertoire "tests" au
 \vspace{0.5cm}
 \noindent
 
-Les résultats de nos tests confirment le bon fonctionnement de notre implémentation des algorithmes. Les extensions calculées correspondent aux attentes théoriques pour chaque cas testé, validant ainsi l'exactitude de notre implémentation.
+Pour valider notre implémentation des algorithmes, un script \textit{\textbf{test.py}} a été créé. 
+Ce script traite tous les fichiers de test du répertoire \texttt{.\textbackslash tests} au format \texttt{test\_afX.apx}, 
+calcule les extensions correspondantes, et compare les résultats obtenus aux attentes théoriques fournies dans les fichiers \texttt{test\_afX\_co/st.txt}. 
+Les résultats de ces tests sont conformes aux attentes pour chaque cas testé.
+
 
 \subsubsection{Remarque sur les fichiers de test.} 
 Dans le cadre des tests réalisés, nous avons constaté une petite disparité dans les formats des fichiers fournis. En effet, alors que les spécifications de l'énoncé imposaient que chaque ligne décrivant un argument ou une attaque se termine par un point (par exemple, \texttt{arg(a).} ou \texttt{att(a,b).}), certains fichiers de test présentaient des lignes sans point final, comme \texttt{arg(a)} ou \texttt{att(a,b)}. Afin de garantir une compatibilité avec ces fichiers, notre implémentation a été adaptée pour gérer les deux formats. 
@@ -367,7 +371,7 @@ En conclusion, ce projet a été l'occasion d'élargir nos connaissances sur les
 L'intégration de ces algorithmes dans un outil fonctionnel a permis de concrétiser notre apprentissage. 
 Ce travail constitue une contribution à l'application des théories de l'argumentation et ouvre la voie à des perspectives d'amélioration.
 
-
+\newpage
 
 \bibliographystyle{unsrt} 
 \bibliography{mybib}
